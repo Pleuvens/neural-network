@@ -1,0 +1,10 @@
+.DS_Store
+*.png
+rt
+*.tar
+*.vscode
+*.dSYM
+*.ppm
+*.o
+*.log
+build/
