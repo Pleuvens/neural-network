@@ -24,6 +24,15 @@ target_compile_options(op_overloading PRIVATE -Wall -Wextra -Werror)
 target_link_libraries(op_overloading PUBLIC "")
 target_include_directories(op_overloading PUBLIC ${SHARED_INCLUDE_DIR})
 
+add_library(neural_network OBJECT)
+target_sources(neural_network
+    PRIVATE "src/neural_network/neural_network.cc"
+    PUBLIC  "${CMAKE_CURRENT_SOURCE_DIR}/src/neural_network/neural_network.hh"
+)
+target_compile_options(neural_network PRIVATE -Wall -Wextra -Werror)
+target_link_libraries(neural_network PUBLIC "")
+target_include_directories(neural_network PUBLIC ${SHARED_INCLUDE_DIR})
+
 add_library(matrix OBJECT)
 target_sources(matrix
     PRIVATE "src/matrix/matrix.cc"
@@ -51,10 +60,12 @@ if ("${CMAKE_BUILD_TYPE}" STREQUAL "Tests")
     add_executable(Tests)
     target_link_libraries(Tests PRIVATE op_overloading
                                         matrix
+                                        neural_network
                                         test)
 else()
     add_executable(Raytracer)
     target_link_libraries(Raytracer PRIVATE op_overloading
                                             matrix
+                                            neural_network
                                             main)
 endif()

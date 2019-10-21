@@ -1,1 +1,1 @@
-# neural-network-genetic
+# neural-network
