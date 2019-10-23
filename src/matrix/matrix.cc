@@ -1,3 +1,5 @@
+#include <random>
+
 #include "matrix.hh"
 #include "op_overloading.hh"
 
@@ -25,6 +27,32 @@ Matrix Matrix::identity(const int size)
     Matrix res = Matrix(size, size);
     for (int i = 0; i < size; i++)
         res.setValue(i, i, 1);
+    return res;
+}
+
+Matrix Matrix::random(const int height, const int width, const float min,
+        const float max)
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(min, max);
+    Matrix res = Matrix(height, width);
+    for (int y = 0; y < height; y++)
+    {
+        for(int x = 0; x < width; x++)
+            res.setValue(y, x, dis(gen));
+    }
+    return res;
+}
+
+Matrix Matrix::apply(const Matrix& m, float(*fun)(const float))
+{
+    Matrix res = Matrix(m._height, m._width);
+    for (int y = 0; y < m._height; y++)
+    {
+        for(int x = 0; x < m._width; x++)
+            res.setValue(y, x, fun(m.getValue(y, x)));
+    }
     return res;
 }
 
@@ -119,6 +147,17 @@ Matrix Matrix::invert(void)
     return res;
 }
 
+float Matrix::flatten(void)
+{
+    float res = 0;
+    for (auto y = 0; y < _height; y++)
+    {
+        for(auto x = 0; x < _width; x++)
+            res += getValue(y, x);
+    }
+    return res;
+}
+
 bool Matrix::operator==(const Matrix& m) const
 {
     if (_height != m._height || _width != m._width)
@@ -141,6 +180,32 @@ bool Matrix::operator!=(const Matrix& m) const
             return true;
     }
     return false;
+}
+
+Matrix Matrix::operator+(const Matrix& m)
+{
+    if (_height != m._height || _width != m._width)
+        throw "Invalid matrix size";
+    Matrix res(_height, _width);
+    for (int y = 0; y < _height; y++)
+    {
+        for (int x = 0; x < _width; x++)
+            res.setValue(y, x, getValue(y, x) + m.getValue(y, x));
+    }
+    return res;
+}
+
+Matrix Matrix::operator-(const Matrix& m)
+{
+    if (_height != m._height || _width != m._width)
+        throw "Invalid matrix size";
+    Matrix res(_height, _width);
+    for (int y = 0; y < _height; y++)
+    {
+        for (int x = 0; x < _width; x++)
+            res.setValue(y, x, getValue(y, x) - m.getValue(y, x));
+    }
+    return res;
 }
 
 Matrix Matrix::operator*(const Matrix& m)

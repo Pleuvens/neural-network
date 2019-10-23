@@ -10,6 +10,9 @@ class Matrix {
         Matrix(const int height, const int width, std::initializer_list<float> list);
 
         static Matrix identity(const int size);
+        static Matrix random(const int height, const int width, const float min,
+               const float max);
+        static Matrix apply(const Matrix &m, float (*fun)(const float));
 
         inline int getHeight(void) const { return _height; }
         inline int getWidth(void)  const { return _width; }
@@ -25,9 +28,12 @@ class Matrix {
         float minor(const int row, const int column);
         float cofactor(const int row, const int column);
         Matrix invert(void);
+        float flatten(void);
 
         bool operator==(const Matrix& m) const;
         bool operator!=(const Matrix& m) const;
+        Matrix operator+(const Matrix& m);
+        Matrix operator-(const Matrix& m);
         Matrix operator*(const Matrix& m);
         Matrix operator*(const float v);
 

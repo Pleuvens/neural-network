@@ -13,7 +13,8 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -std=c++17 -g -pedantic -fsa
 set(CMAKE_CXX_FLAGS_TESTS "${CMAKE_CXX_FLAGS_TEST} -std=c++17 -g -pedantic -fsanitize=address -D_TESTS")
 
 set(SHARED_INCLUDE_DIR libs src/utils
-                            src/matrix)
+                            src/matrix
+                            src/neural_network)
 
 add_library(op_overloading OBJECT)
 target_sources(op_overloading
@@ -63,9 +64,9 @@ if ("${CMAKE_BUILD_TYPE}" STREQUAL "Tests")
                                         neural_network
                                         test)
 else()
-    add_executable(Raytracer)
-    target_link_libraries(Raytracer PRIVATE op_overloading
-                                            matrix
-                                            neural_network
-                                            main)
+    add_executable(NeuralNetwork)
+    target_link_libraries(NeuralNetwork PRIVATE op_overloading
+                                                matrix
+                                                neural_network
+                                                main)
 endif()
